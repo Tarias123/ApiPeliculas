@@ -21,10 +21,11 @@ builder.Services.AddSwaggerGen();
 
 //Agregamos repositorios
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+builder.Services.AddScoped<IPeliculaRepository, PeliculaRepository>();
 // Configuramos AutoMapper
 
 // Esta es la forma correcta si PeliculasMapper está en el proyecto de arranque
-builder.Services.AddAutoMapper(typeof(PeliculasMapper));
+builder.Services.AddAutoMapper(typeof(PeliculasMapper).Assembly);
 
 
 var app = builder.Build();

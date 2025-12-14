@@ -28,7 +28,7 @@ namespace ApiPeliculas.Repository
             else
             {
                 _db.Categorias.Update(categoria);
-            }
+            }       
             return Guardar();
         }
 

@@ -11,6 +11,8 @@ namespace ApiPeliculas.PeliculasMapper
         {
             CreateMap<Categoria, CategoriaDto>().ReverseMap();
             CreateMap<Categoria, CreateCategoriaDto>().ReverseMap();
+            CreateMap<Pelicula, PeliculaDto>().ReverseMap();
+            CreateMap<Pelicula, CreatePeliculaDto>().ReverseMap();
         }
     }
 }
