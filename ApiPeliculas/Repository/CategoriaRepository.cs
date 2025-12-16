@@ -7,28 +7,34 @@ namespace ApiPeliculas.Repository
     public class CategoriaRepository : ICategoriaRepository
     {
         private readonly AppDbContext _db;
-
-        
-
         public CategoriaRepository(AppDbContext db)
         {
             _db = db;
         }
 
-
         public bool ActualizarCategoria(Categoria categoria)
         {
             categoria.FechaCreacion = DateTime.Now;
-            _db.Categorias.Update(categoria);
+            var categoriaDb = _db.Categorias.Find(categoria.Id);
+            if(categoriaDb != null)
+            {
+                _db.Categorias.Entry(categoriaDb).CurrentValues.SetValues(categoria);
+            }
             return Guardar();
         }
 
-        public bool BorrarCategoria(Categoria categoria)
+        public bool CategoriaExiste(string nombre)
         {
-            _db.Categorias.Remove(categoria);
-            return Guardar();
+            bool valor = _db.Categorias.Any(c => c.Nombre.ToLower().Trim() == nombre.ToLower().Trim());
+            return valor;
         }
-        
+
+        public bool CategoriaExisteId(int categoriaId)
+        {
+            bool valor = _db.Categorias.Any(c => c.Id == categoriaId);
+            return valor;
+        }
+
         public bool CrearCategoria(Categoria categoria)
         {
             categoria.FechaCreacion = DateTime.Now;
@@ -36,20 +42,21 @@ namespace ApiPeliculas.Repository
             return Guardar();
         }
 
-        public bool ExisteCategoria(int categoriaId)
+        public bool DeleteCategoria(int categoriaId)
         {
-            return _db.Categorias.Any(c => c.Id == categoriaId);
-        }
-
-        public bool ExisteCategoria(string nombre)
-        {
-           bool valor = _db.Categorias.Any(c => c.Nombre.ToLower().Trim() == nombre.ToLower().Trim());
-           return valor;
+            _db.Categorias.Remove(_db.Categorias.Find(categoriaId));
+            return Guardar();
         }
 
         public Categoria GetCategoria(int categoriaId)
         {
             return _db.Categorias.FirstOrDefault(c => c.Id == categoriaId);
+
+        }
+
+        public Categoria GetCategoriaPorNombre(string nombre)
+        {
+            return _db.Categorias.FirstOrDefault(c => c.Nombre == nombre);
         }
 
         public ICollection<Categoria> GetCategorias()
